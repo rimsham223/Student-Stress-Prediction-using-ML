@@ -1,0 +1,226 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[margin=1cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{listings}  
+\usepackage{xcolor}   
+\definecolor{codegreen}{rgb}{0,0.6,0}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\color{codegreen}, 
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,   
+    urlcolor=blue,
+    citecolor=blue
+}
+
+\title{\textbf{Project Sukoon: A Stress Predictor for Students} \\ \\[0.3cm] \large \textbf{Apka Sukoon?} } 
+
+\author{
+  \textbf{Group Leader:} Muhammad Furqan Raza (460535)\\
+  Tamkeen Sara (474585) \\
+  Attiqa Bano (473781) \\
+  Rimsha Mahmood (455080) \\
+  \\CS-245 Machine Learning\\ 
+  \textbf{Assignment 02: Literature Review \& Baseline Models}
+}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Introduction}
+Academic stress is a critical issue among students, leading to anxiety, depression, and reduced academic performance. Our project aims to build a Machine Learning-based \textbf{Stress Predictor for Students} that classifies stress levels based on behavioral and psychological features helping students find their \textbf{``Sukoon"}. This Assignment presents a literature review of existing models, a comparative analysis of our baseline models, and justification for our feature selection.
+
+\section{Literature Review}
+
+\subsection{Model 1: Mental Stress Detection in University Students}
+
+\noindent \textbf{Technique:} Evaluated Random Forest, Naive Bayes, SVM, and KNN using 10-fold cross-validation.
+
+\noindent \textbf{Dataset:} Perceived Stress Scale (PSS) responses from 206 students, classified into three stress levels: Highly Stressed, Stressed, and Normal.
+
+\noindent \textbf{Key Findings:} SVM achieved the highest accuracy of 85.71\%, showing its effectiveness for stress prediction using survey-based data.
+
+\noindent \textbf{Relevance:} Demonstrates that ML techniques, particularly SVM, can successfully classify student stress levels.
+
+\subsection{Model 2: Predicting Student Stress Levels}
+
+\noindent \textbf{Technique:} Evaluated 12 ML models, including SVM, Random Forest, and Naive Bayes, optimized using K-Fold cross-validation.
+
+\noindent \textbf{Dataset:} Data from 1100 students at Tribhuvan University, Nepal, with 21 features, including self-esteem, academic performance, and social confidence.
+
+\noindent \textbf{Key Findings:} Naive Bayes achieved the highest accuracy of 90\%, with academic periods identified as the most stressful times.
+
+\noindent \textbf{Relevance:} Highlights the role of ML in detecting student stress and optimizing mental health support.
+
+\subsection{Model 3: Exploring Predictive Models for Stress Detection}
+
+\noindent \textbf{Technique:} Used classification-based ML algorithms to analyze questionnaire-based data focused on anxiety, depression, and workload.
+
+\noindent \textbf{Dataset:} Survey-based responses from students measuring psychological and behavioral stress factors.
+
+\noindent \textbf{Key Findings:} Achieved 86.84\% accuracy, reinforcing ML’s ability to predict student stress based on structured questionnaire responses.
+
+\noindent \textbf{Relevance:} Demonstrates that questionnaire-based data can provide valuable stress predictions using ML.
+
+\section{Model Chosen}
+Based on the literature review and empirical results, we selected \textbf{Logistic Regression} and \textbf{Random Forest} as the primary models for stress level classification.
+
+\subsection{Why These Models?}
+\begin{itemize}
+    \item \textbf{Logistic Regression:} A simple yet effective model for classification problems, providing interpretable results and computational efficiency.
+    \item \textbf{Random Forest:} A robust ensemble learning method capable of handling non-linearity, capturing feature interactions, and providing higher accuracy.
+\end{itemize}
+
+\subsection{Implementation Details}
+Below is a code snippet demonstrating the application of each model:
+
+\textbf{Logistic Regression Implementation Using Soft Max Function:}
+\begin{lstlisting}
+    def softmax(z):
+    exp_z = np.exp(z - np.max(z, axis=1, keepdims=True))  
+    return exp_z / np.sum(exp_z, axis=1, keepdims=True)
+\end{lstlisting}
+
+\textbf{Loss Function For Logistic Regression:}
+\begin{lstlisting}
+    def cross_entropy_loss(y_true, y_pred):
+     m = y_true.shape[0]
+    loss = -np.sum(y_true * np.log(y_pred + 1e-15)) / m
+    return loss
+\end{lstlisting}
+
+\textbf{Random Forest Implementation:}
+\begin{lstlisting}
+    def train_model(X_train, y_train, n_estimators=100, max_features='sqrt', random_state=42):
+    rf = RandomForestClassifier(n_estimators=n_estimators, max_features=max_features, random_state=random_state)
+    rf.fit(X_train, y_train)
+    print("\nRandom Forest model trained successfully!")
+    return rf
+    rf_model = train_model(X_train, y_train)
+\end{lstlisting}
+
+\section{Feature Selection and Correlation Analysis}
+Our dataset includes features relevant to student stress prediction, selected based on:
+\begin{itemize}
+    \item \textbf{Psychological Factors:} Anxiety Level, Depression, Self-Esteem.
+    \item \textbf{Physical and Behavioral Indicators:} Sleep Quality, Blood Pressure, Headache.
+    \item \textbf{Academic and Social Factors:} Study Load, Academic Performance, Peer Pressure, Future Career Concerns.
+\end{itemize}
+
+\textbf{Key correlations} found in our dataset:
+\begin{itemize}
+    \item Stress Level is highly correlated with Bullying (0.75), Anxiety Level (0.74), and Future Career Concerns (0.74).
+    \item Sleep Quality (-0.75) and Self-Esteem (-0.76) show negative correlations with stress, indicating better sleep and confidence reduce stress levels.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    % Left Side: Correlation Matrix
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Correlation.png}
+        \caption{Correlation Matrix}
+        \label{fig:correlation}
+    \end{minipage}
+    \hfill
+    % Right Side: Two stacked Feature Importance images
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Feature_Importance.png}
+        \caption{Feature Importance of Logistic Regression For Class 0}
+        \label{fig:feature_importance_0}
+        
+        \vspace{0.3cm} % Adjust space between the two images
+        
+        \includegraphics[width=\textwidth]{Feature_Importance1.png}
+        \caption{Feature Importance of Logistic Regression For Class 1}
+        \label{fig:feature_importance_1}
+    \end{minipage}
+    \caption{Key Features Affecting Stress Level}
+    \label{fig:feature_imp}
+\end{figure}
+
+
+\section{Visualization}
+\subsection{Confusion Matrix}
+\begin{lstlisting}
+    cm = confusion_matrix(y_test, y_pred)
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['Low', 'Medium', 'High'], yticklabels=['Low', 'Medium', 'High'])
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.title('Confusion Matrix')
+    plt.show()
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \subfigure[Logistic Regression]{
+        \includegraphics[width=0.49\textwidth]{Confusion_Matrix_Log.png}
+    }
+    \subfigure[Random Forest]{
+        \includegraphics[width=0.43\textwidth]{Confusion_Matrix_RF.png}
+    }
+    \caption{Confusion Matrices for Logistic Regression and Random Forest}
+    \label{fig:conf_matrices}
+\end{figure}
+
+\section{Model Comparison}
+
+We trained and evaluated Logistic Regression and Random Forest classifiers on our \textbf{Mental Health Stress Detector dataset}. The results are summarized below:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lcccc}
+        \toprule
+        \textbf{Model} & \textbf{Accuracy (\%)} & \textbf{Precision} & \textbf{Recall} & \textbf{F1 Score} \\
+        \midrule
+        Logistic Regression & 86.81 & 0.8707 & 0.8683 & 0.8685 \\
+        Random Forest & 88.79 & 0.8800 & 0.8870 & 0.8875 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Performance Comparison of Logistic Regression and Random Forest}
+    \label{tab:model_comparison}
+\end{table}
+
+\section{Analysis}
+
+Our comparative analysis of Logistic Regression and Random Forest reveals that \textbf{Random Forest performs better}, achieving an accuracy of \textbf{88.79\%} compared to \textbf{86.81\%} for Logistic Regression. Several factors contribute to this performance difference:
+
+\begin{itemize}
+    \item \textbf{Non-linearity Handling:} Logistic Regression is a linear model, meaning it struggles with complex relationships between features. Random Forest, an ensemble of decision trees, captures non-linear patterns effectively.
+    \item \textbf{Feature Interactions:} Random Forest automatically considers feature interactions, whereas Logistic Regression assumes independent contributions of each feature.
+    \item \textbf{Robustness to Noise:} Random Forest is more resistant to outliers and noisy data due to its bootstrapping mechanism, making it a more reliable classifier in real-world applications.
+    \item \textbf{Feature Importance:} Random Forest provides insights into feature importance, which helps in identifying key factors influencing stress levels.
+    \item \textbf{Computational Complexity:} Logistic Regression is computationally efficient and interpretable but lacks the adaptability of tree-based models in handling diverse datasets.
+\end{itemize}
+
+\section{Conclusion}
+This study highlights the potential of machine learning in predicting student stress levels using behavioral, academic, and psychological indicators. Our comparative analysis demonstrates that Random Forest emerges as the superior model for our stress detection task due to its ability to handle complex data distributions and provide more accurate predictions. 
+
+By leveraging features such as anxiety levels, sleep quality, and peer pressure, our model effectively classifies students into different stress categories. These insights can assist educational institutions in designing targeted interventions for mental well-being.
+
+\section{References Of Research Papers}
+
+\begin{itemize}
+    \item \href{https://www.sciencedirect.com/science/article/pii/S1877050919306581?via%3Dihub}{Article on ScienceDirect: Machine Learning for Stress Detection}
+    \item \href{https://ieeexplore.ieee.org/abstract/document/10660827/metrics#metrics}{IEEE Paper: Stress Prediction Using AI}
+    \item \href{https://ieeexplore.ieee.org/abstract/document/10660827}{IEEE Paper: Student Stress Analysis}
+\end{itemize}
+
+\end{document}
