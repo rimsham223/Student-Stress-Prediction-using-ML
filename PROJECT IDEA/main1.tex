@@ -1,0 +1,112 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[a4paper,margin=1cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+
+\title{\textbf{Project Sukoon: A Stress Predictor for Students} \\ \\[0.3cm] \large \textbf{Apka Sukoon?} } 
+\author{
+    \textbf{Group Members:} \\ 
+    \textbf{Group Leader:} Muhammad Furqan Raza (460535)\\ 
+    Tamkeen Sara (474585) \\ 
+    Attiqa Bano (473781)\\ 
+    Rimsha Mahmood (455080)\\ 
+    CS-245 Machine Learning
+    \textbf{Assignment 1}
+}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Problem Statement}
+Academic stress is a growing concern among students, leading to burnout, anxiety, and depression. Traditional mental health support systems rely on self-reporting, which often fails due to social stigma and lack of awareness. This project aims to develop an \textbf{ML-based Stress Predictor} that analyzes student behavior (sleep patterns, academic performance, social media usage, and sentiment analysis) to predict stress levels. The goal is to enable \textbf{early detection of academic stress} so universities and students can take preventive measures before mental health issues escalate.
+
+\section{Motivation}
+\begin{itemize}
+    \item \textbf{Rising Student Stress Levels:} Studies show that academic pressure is one of the leading causes of mental health decline among students.
+    \item \textbf{Limited Awareness in Pakistan:} Mental health is often ignored in Pakistani academic institutions, making it essential to develop a localized solution.
+    \item \textbf{Lack of Automated Detection Systems:} Most universities rely on counselors and surveys, which are ineffective in real-time stress monitoring.
+    \item \textbf{Potential Societal Impact:} By integrating stress detection into educational institutions, this project can improve student well-being, academic performance, and overall quality of life.
+\end{itemize}
+
+\section{Dataset Overview}
+This project will use multiple datasets to analyze student stress levels.
+
+\subsection{Publicly Available Dataset}
+\begin{itemize}
+    \item \textbf{Student Stress Factors: A Comprehensive Analysis (Kaggle):} Contains survey-based responses on sleep, academic workload, and mental health symptoms.
+\end{itemize}
+
+\subsection{Self-Collected Data (Surveys \& Online Forms)}
+\begin{itemize}
+    \item Conduct an \textbf{anonymous student survey} to collect real-world data on academic stress.
+    \item Features include \textbf{Social media usage, daily screen time, sleep hours, and self-reported stress levels}.
+\end{itemize}
+
+\subsection{Dataset Characteristics}
+\begin{center}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|p{8cm}|}
+        \hline
+        \textbf{Feature} & \textbf{Type} & \textbf{Description} \\ \hline
+        Sleep Hours & Numerical & Total hours of sleep per night \\ \hline
+        Academic Workload & Categorical & High/Medium/Low \\ \hline
+        Social Media Usage & Numerical & Time spent on social media per day \\ \hline
+        Sentiment Score & Numerical & Extracted from survey responses using NLP \\ \hline
+        Stress Level & Categorical & Low, Medium, High (Target Variable) \\ \hline
+
+    \end{tabular}
+    \caption{Dataset Overview}
+\end{table}
+\end{center}
+
+\vspace{0.5cm}
+
+
+\section{Approach and Implementation}
+
+Our \textbf{Stress Predictor} will utilize \textbf{machine learning techniques} to classify students into different stress levels based on behavioral data. The approach involves four key stages:
+
+\subsection{Data Collection \& Preprocessing}
+We will use publicly available datasets and self-collected survey responses. The data will be cleaned, missing values handled, and categorical variables encoded for analysis.
+
+\subsection{Feature Engineering \& Sentiment Analysis}
+Relevant features such as \textbf{sleep patterns, academic workload, and social media activity} will be extracted. Sentiment analysis using \textbf{Naïve Bayes} will be applied to student survey responses to quantify stress indicators.
+
+\subsection{Machine Learning Modeling}
+\begin{itemize}
+    \item \textbf{Clustering (K-Means)} to identify stress groups.
+    \item \textbf{Classification (Logistic Regression, SVM, Random Forests)} to predict stress levels.
+    \item \textbf{Recommendations using Python Techniques} to help students reduce their stress levels and step towards a healthy lifestyle.
+    \item \textbf{Evaluation} using \textbf{Precision, Recall, F1-score, and Confusion Matrix}.
+\end{itemize}
+
+\subsection{System Deployment}
+The final model will be integrated with some UI, where students can input their behavioral data and receive stress level predictions along with recommendations for stress management.\\
+\textbf{For example:} if a person has high stress level, the model suggests: You’re under a lot of pressure, try a 5-minute breathing exercise.
+
+\section{Evaluation Methodology}
+To assess the performance of our \textbf{stress detection model}, we will use \textbf{machine learning evaluation metrics}:
+
+\subsection{Classification Metrics}
+\begin{itemize}
+    \item \textbf{Accuracy, Precision, Recall, and F1-score} (for predicting stress levels).
+    \item \textbf{Confusion Matrix} to analyze false positives/negatives.
+\end{itemize}
+
+\subsection{Clustering Evaluation}
+\begin{itemize}
+    \item \textbf{Silhouette Score} and \textbf{Dunn Index} to measure how well students are grouped into stress categories.
+\end{itemize}
+
+\subsection{Sentiment Analysis Performance}
+\begin{itemize}
+    \item \textbf{Naïve Bayes Model} accuracy for predicting stress from text responses.
+\end{itemize}
+
+The model will be tested on real-world student data and compared against baseline approaches to ensure effectiveness.
+
+\end{document}
