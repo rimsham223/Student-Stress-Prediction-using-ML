@@ -1,0 +1,197 @@
+\documentclass[a4paper,11pt]{article}
+\linespread{0.95}
+\usepackage[
+  a4paper,
+  margin=1cm,
+  footskip=10pt
+]{geometry}
+
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{parskip}
+\usepackage{hyperref}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\usepackage{subcaption}
+
+\rfoot{Page \thepage}
+
+\renewcommand{\familydefault}{\sfdefault}
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\color{codegreen}, % Green-colored text
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,   
+    urlcolor=blue,
+    citecolor=blue
+}
+
+\title{\textbf{Project Sukoon: A Stress Predictor for Students} \\ \\[0.3cm] \large \textbf{Apka Sukoon?} } 
+
+\author{
+  \textbf{Group Leader:} Muhammad Furqan Raza (460535)\\
+  Tamkeen Sara (474585) \\
+  Attiqa Bano (473781) \\
+  Rimsha Mahmood (455080) \\
+  \\CS-245 Machine Learning\\ 
+  \textbf{Assignment 03: Proposed Approach \& Results}
+}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+Mental health issues are increasingly prevalent, and early detection of stress is crucial in ensuring timely intervention. Our project, “Mental Health Stress Detector,” uses machine learning techniques to classify individuals into stress categories based on questionnaire data. In Assignment 2, we implemented baseline models—Multiclass Logistic Regression and Random Forest. Although these models performed well, they exhibited limitations such as overfitting and sensitivity to high-dimensional data.
+
+This report presents our enhanced approaches in Assignment 3, which incorporate regularization and dimensionality reduction techniques to improve model performance, generalization, and robustness.
+
+\section{Proposed Methods}
+To enhance the performance of our baseline models, we implemented four novel/improved methods:
+
+\subsection{L1 Regularization (Lasso)}
+L1 regularization adds a penalty equal to the absolute value of the magnitude of coefficients to the loss function. This helps in both regularization and feature selection. Unimportant feature weights are pushed to zero, reducing model complexity.
+
+\textbf{Motivation:} Reduce overfitting and eliminate irrelevant features in high-dimensional space.
+
+\subsection{L2 Regularization (Ridge)}
+L2 regularization adds the squared magnitude of coefficients as a penalty to the loss function. It discourages large coefficients without necessarily eliminating them.
+
+\textbf{Motivation:} Prevent overfitting and improve model stability, especially in presence of multicollinearity.
+
+\subsection{Principal Component Analysis (PCA)}
+PCA transforms the feature space into a set of orthogonal components that explain the most variance in the data. By reducing dimensionality, we aim to decrease noise and improve computational efficiency.
+
+\textbf{Motivation:} Reduce feature space while preserving variance, mitigate noise, and enhance generalization.
+
+\subsection{PCA with L2 Regularization}
+We combined PCA with L2-regularized logistic regression to explore the synergy of dimensionality reduction and regularization.
+
+\textbf{Motivation:} Combine benefits of lower-dimensional space with regularization to minimize overfitting while retaining most informative patterns.
+
+\section{Implementation}
+We used Python’s scikit-learn library to implement all models. Below are key code snippets used in experimentation:
+
+\subsection*{L1-Regularized Logistic Regression}
+\begin{lstlisting}[language=Python]
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression(penalty='l1', solver='liblinear')
+model.fit(X_train, y_train)
+accuracy = model.score(X_test, y_test)
+print("L1 Accuracy:", accuracy)
+\end{lstlisting}
+
+\subsection*{L2-Regularized Logistic Regression}
+\begin{lstlisting}[language=Python]
+model = LogisticRegression(penalty='l2', solver='liblinear')
+model.fit(X_train, y_train)
+accuracy = model.score(X_test, y_test)
+print("L2 Accuracy:", accuracy)
+\end{lstlisting}
+
+\subsection*{PCA with Logistic Regression}
+\begin{lstlisting}[language=Python]
+from sklearn.decomposition import PCA
+pca = PCA(n_components=10)
+X_train_pca = pca.fit_transform(X_train)
+X_test_pca = pca.transform(X_test)
+
+model = LogisticRegression()
+model.fit(X_train_pca, y_train)
+accuracy = model.score(X_test_pca, y_test)
+\end{lstlisting}
+
+\section{Results}
+
+\subsection*{Accuracy Comparison}
+
+\begin{table}[H]
+\centering
+\caption{Model Performance Comparison}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Model} & \textbf{Accuracy (\%)} \\
+\hline
+Multiclass Logistic Regression & 86.81 \\
+Random Forest & 88.79 \\
+L1-Regularized Logistic Regression & 89.09 \\
+L2-Regularized Logistic Regression & \textbf{89.54} \\
+PCA with Logistic Regression & 88.18 \\
+PCA + L2-Regularized Logistic Regression & 88.63 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{Observations}
+\begin{itemize}
+    \item L2 regularization offered the highest accuracy, likely due to better control over variance.
+    \item L1 regularization gave a decent boost while also helping reduce the feature set.
+    \item PCA slightly improved performance but alone wasn't enough to outperform regularization techniques.
+    \item Combining PCA and L2 achieved a balance between dimensionality and generalization.
+\end{itemize}
+
+\section*{Output Snippets}
+The Confusion Matrices of Both Approaches are as follows:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{output_l2_accuracy.png}
+        \caption{L-2 Regularization: Accuracy = 89.54\%}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{output_pca_l2.png}
+        \caption{PCA \& L-2 Regularization: Accuracy = 88.63\%}
+    \end{subfigure}
+    \caption{Confusion Matrices for Logistic Regression With L-2 Regularization \& PCA}
+    \label{fig:conf_matrices}
+\end{figure}
+
+
+
+\section{Analysis}
+Compared to baseline models, all four improved approaches enhanced performance in varying degrees:
+
+\subsection*{Why L2 Performed Best}
+L2 regularization avoids overfitting by penalizing large weights and is more robust in high-dimensional datasets with multicollinearity. It maintains all features but shrinks their influence, enabling the model to generalize better.
+
+\subsection*{L1 vs L2}
+While both aim to prevent overfitting, L1 introduces sparsity which is beneficial when irrelevant or redundant features exist. L2, on the other hand, retains all features and stabilizes the model, making it slightly more accurate in our dataset.
+
+\subsection*{Impact of PCA}
+PCA helped by reducing dimensionality and noise, but it may also lose interpretability and some information. This possibly explains the dip in performance in PCA-only models compared to L2.
+
+\subsection*{Trade-offs in PCA+L2}
+While this combination was effective, dimensionality reduction via PCA may have suppressed some useful features which L2 could have leveraged better in its original form.
+
+\section{Conclusion}
+Through our enhanced methods, we demonstrated that careful application of regularization and dimensionality reduction techniques leads to better predictive performance in stress detection. Among all, L2 regularization proved the most effective, with an accuracy of 89.54\%.
+
+\noindent These improvements are practical, computationally efficient, and can be scaled to larger datasets. Future work may involve deeper models like Neural Networks or using feature selection with domain knowledge.
+
+\section*{Notebook Links}
+\begin{itemize}
+    \item \textbf{L1 \& L2 Implementation:} \url{https://colab.research.google.com/drive/1bt2YmW3BG64smo0DcEKes-l1f9uB0vat?usp=sharing}
+    \item \textbf{PCA + Logistic Regression Notebook:} \url{https://colab.research.google.com/drive/1lXqxDozaXfpSN7KOPnUZ58PMBYm7WTpN?usp=sharing}
+\end{itemize}
+
+\end{document}
